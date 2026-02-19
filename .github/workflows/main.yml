@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แนะนำร้านอาหารสมุทรปราการ</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;font-family:'Prompt',sans-serif;margin:0;padding:0}
+body{background:#f5f5f5;color:#333}
+header{
+    background:#ffcc00;
+    padding:15px 25px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+.logo{font-size:24px;font-weight:600}
+.search-bar{flex:1}
+.search-bar input{
+    width:100%;
+    padding:10px 18px;
+    border-radius:30px;
+    border:none;
+    outline:none;
+}
+.hero{
+    background:url("https://images.unsplash.com/photo-1555396273-367ea4eb4db5") center/cover;
+    height:320px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+}
+.hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.45);
+}
+.hero-content{
+    position:relative;
+    color:#fff;
+    text-align:center;
+}
+.hero-content h1{font-size:40px}
+.hero-content p{font-size:18px}
+
+.categories{
+    background:#fff;
+    padding:20px;
+    display:flex;
+    gap:25px;
+    justify-content:center;
+    margin:0px auto 35px;
+    border-radius:20px;
+    width:90%;
+    box-shadow:0 8px 20px rgba(0,0,0,.1);
+}
+.category{
+    text-align:center;
+    cursor:pointer;
+    opacity:.7;
+}
+.category.active{opacity:1}
+.category span{font-size:20px}
+.category p{font-size:14px}
+.section{padding:0 5% 50px}
+.section h2{margin-bottom:20px}
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+.card{
+    background:#fff;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,.1);
+    transition:.3s;
+}
+.card:hover{transform:translateY(-6px)}
+.card img{
+    width:100%;
+    aspect-retio:16/9;
+    object-fit:cover;
+}
+.card-content{padding:15px}
+.badge{
+    display:inline-block;
+    background:#ffe4c4;
+    color:#ff6600;
+    padding:4px 10px;
+    border-radius:20px;
+    font-size:12px;
+    margin-bottom:8px;
+}
+.card h3{font-size:18px;margin-bottom:6px}
+.card p{font-size:14px;color:#666}
+.btn{
+    margin-top:9px;
+    display:inline-block;
+    background:linear-gradient(135deg,#ff7a18,#ffb347);
+    color:#fff;
+    padding:8px 15px;
+    border-radius:20px;
+    text-decoration:none;
+    font-size:14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">🍽️ PKRes</div>
+    <div class="search-bar">
+        <input id="search" placeholder="ค้นหาร้าน / ประเภท / เมนู" onkeyup="search()">
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>ร้านอร่อยอยู่ที่ไหน ?</h1>
+        <p>สมุทรปราการมีคำตอบ</p>
+    </div>
+</section>
+
+<div class="categories" id="categories"></div>
+
+<section class="section">
+    <h2>⭐ ร้านอาหารยอดนิยม</h2>
+    <div class="cards" id="cards"></div>
+</section>
+
+<script>
+const restaurants=[
+ {
+ 
+        name: "เรือนเพชรสุกี้ ศรีนครินทร์ (ปากน้ำ)",
+ 
+        type: "อาหารจีนดั้งเดิม",
+ 
+        menu: ["ปูผัดผงกะหรี่", "ปลาหมึกนึ่งมะนาว"],
+ 
+        img: "https://img.wongnai.com/p/1920x0/2023/08/07/fa814f2564b44f00bd2d22bb8f01325e.jpg",
+ 
+        stars: 4,
+ 
+        map: "https://www.google.com/maps/place/%E0%B9%80%E0%B8%A3%E0%B8%B7%E0%B8%AD%E0%B8%99%E0%B9%80%E0%B8%9E%E0%B8%8A%E0%B8%A3%E0%B8%AA%E0%B8%B8%E0%B8%81%E0%B8%B5%E0%B9%89+%E0%B8%A8%E0%B8%A3%E0%B8%B5%E0%B8%99%E0%B8%84%E0%B8%A3%E0%B8%B4%E0%B8%99%E0%B8%97%E0%B8%A3%E0%B9%8C+(%E0%B8%9B%E0%B8%B2%E0%B8%81%E0%B8%99%E0%B9%89%E0%B8%B3)/@13.5977247,100.5934828,15z/data=!4m9!1m2!2m1!1z4Lij4LmJ4Liy4LiZ4Lit4Liy4Lir4Liy4Lij!3m5!1s0x30e2a0ac4d8bab2d:0xecd4b8686b757702!8m2!3d13.5977247!4d100.6115072!16s%2Fg%2F11fx89vs65?authuser=0&entry=ttu&g_ep=EgoyMDI1MTIwOC4wIKXMDSoASAFQAw%3D%3D"
+ 
+    },
+ 
+    {
+ 
+        name: "หวังบู่สมุทรนิเวศน์",
+ 
+        type: "อาหารจานเดียว",
+ 
+        menu: ["ข้าวหมกไก่", "ข้าวมันไก่"],
+ 
+        img: "https://www.zolitic.com/media/65794978496a6f314c434979496a6f7a4d7a4d794e5377694d7949364d5377694e5349364d5449344d4377694e6949364e7a497766513d3d.jpg",
+ 
+        stars: 4,
+ 
+        map: "https://www.google.com/maps/place/%E0%B8%A3%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B8%AB%E0%B8%A7%E0%B8%B1%E0%B8%87%E0%B8%9A%E0%B8%B9%E0%B9%88%E0%B8%AA%E0%B8%A1%E0%B8%B8%E0%B8%97%E0%B8%A3%E0%B8%99%E0%B8%B4%E0%B9%80%E0%B8%A7%E0%B8%A8%E0%B8%99%E0%B9%8C+%E0%B9%80%E0%B8%88%E0%B9%89%E0%B8%B2%E0%B9%80%E0%B8%81%E0%B9%88%E0%B8%B2%E0%B8%9B%E0%B8%B2%E0%B8%81%E0%B8%99%E0%B9%89%E0%B8%B3/@13.6035128,100.6048365,21z/data=!4m10!1m2!2m1!1z4Lij4LmJ4Liy4LiZ4Lit4Liy4Lir4Liy4LijIOC4quC4oeC4uOC4l-C4o-C4m-C4o-C4suC4geC4suC4ow!3m6!1s0x30e2a1dfcfa94c05:0x1c553228f6bee6db!8m2!3d13.6035167!4d100.6051315!15sCj3guKPguYnguLLguJnguK3guLLguKvguLLguKMg4Liq4Lih4Li44LiX4Lij4Lib4Lij4Liy4LiB4Liy4LijWkAiPuC4o-C5ieC4suC4mSDguK3guLLguKvguLLguKMg4Liq4Lih4Li44LiX4Lij4Lib4Lij4Liy4LiB4Liy4LijkgEQaGFsYWxfcmVzdGF1cmFudJoBRENpOURRVWxSUVVOdlpFTm9kSGxqUmpsdlQyNVdSV1Z1U2pOVFdFNVBZa1Z3VWxWNlpHOVZiVVp1VlZkT2QxZElZeEFC4AEA-gEECAAQPw!16s%2Fg%2F11g197lt3j?entry=ttu&g_ep=EgoyMDI1MTIwOC4wIKXMDSoASAFQAw%3D%3D"
+ 
+    },
+ 
+    {
+ 
+        name: "Suki Teenoi ศรีนครินทร์",
+ 
+        type: "ชาบู สุกี้",
+ 
+        menu: ["หมูสไลด์", "ซุปดำ"],
+ 
+        img: "https://media.nationthailand.com/uploads/images/contents/w1024/2025/07/Y7RXrVh5HCvXUQm0ERwK.webp?x-image-process=style/lg-webp",
+ 
+        stars: 4,
+ 
+        map: "https://maps.google.com/?q=Suki Teenoi Srinakarin"
+ 
+    },
+ 
+    {
+ 
+        name: "ครัวบ้านย่า",
+ 
+        type: "อาหารทะเล",
+ 
+        menu: ["ปลากระพงทอดน้ำปลา","ปลากระพงนึ่งมะนาว"],
+ 
+         img: "https://scontent.fbkk14-1.fna.fbcdn.net/v/t39.30808-6/474932100_590387107184259_1242826581325001342_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=86c6b0&_nc_ohc=28wZdvrryBYQ7kNvwEG9tLY&_nc_oc=AdlI_IXUWuyGIa03-TAWxYxPXkGgfRyJSRwEoCvsju_v2Vyl7uSBt8xRaTho_OvTDP0&_nc_zt=23&_nc_ht=scontent.fbkk14-1.fna&_nc_gid=8Rm5kfIVgxikkyuK98dNBA&oh=00_AfvfuT9hKh3lLa6fEA8f7qqh6dLb8sivqapo_NDWfc7vDg&oe=6993260F",
+
+        stars: 4,
+ 
+        map: "https://maps.google.com/?q=Bangkok Seafood"
+ 
+    },
+ 
+    {
+ 
+        name: "Lasunya Kafe",
+ 
+        type: "คาเฟ่",
+ 
+        menu: ["ชาไทย", "บราวนี่"],
+ 
+        img: "",
+ 
+        stars: 5,
+ 
+        map: "https://maps.google.com/?q=Lasunya Kafe"
+ 
+    },
+ 
+
+ 
+    // --- โซนบางปู ---
+ 
+    {
+ 
+        name: "Sala Sukjai บางปู",
+ 
+        type: "อาหารทะเล ริมทะเล",
+ 
+        menu: ["กุ้งอบวุ้นเส้น", "ปลากระพงนึ่งซีอิ๊ว"],
+ 
+        img: "",
+ 
+        stars: 4,
+ 
+        map: "https://maps.google.com/?q=Sala Sukjai Bangpu"
+ 
+    },
+ 
+    {
+ 
+        name: "ครัวพระสมุทรเจดีย์",
+ 
+        type: "อาหารไทย",
+ 
+        menu: ["ต้มยำทะเล", "ไข่เจียวหมูสับ"],
+ 
+        img: "",
+ 
+        stars: 4,
+ 
+        map: "https://maps.google.com/?q=ครัวพระสมุทรเจดีย์"
+ 
+    },
+ 
+ 
+];
+
+const cards=document.getElementById("cards");
+const categories=document.getElementById("categories");
+
+function render(list){
+    cards.innerHTML="";
+    list.forEach(r=>{
+        cards.innerHTML+=`
+        <div class="card">
+            <img src="${r.img}">
+            <div class="card-content">
+                <span class="badge">📍 ${r.zone}</span>
+                <h3>${r.name}</h3>
+                <p>${r.type}</p>
+                <a class="btn">ดูรายละเอียด</a>
+            </div>
+        </div>`;
+    });
+}
+
+const types=["ทั้งหมด",...new Set(restaurants.map(r=>r.type))];
+types.forEach(t=>{
+    categories.innerHTML+=`
+    <div class="category ${t==="ทั้งหมด"?"active":""}" onclick="filter('${t}',this)">
+        <span>🍽️</span><p>${t}</p>
+    </div>`;
+});
+
+function filter(type,el){
+    document.querySelectorAll(".category").forEach(c=>c.classList.remove("active"));
+    el.classList.add("active");
+    render(type==="ทั้งหมด"?restaurants:restaurants.filter(r=>r.type===type));
+}
+
+function search(){
+    const k=search.value;
+    render(restaurants.filter(r=>r.name.includes(k)||r.type.includes(k)||r.menu.some(m=>m.includes(k))));
+}
+
+render(restaurants);
+</script>
+
+</body>
+</html>
